@@ -52,10 +52,10 @@
 			return;
 		}
 		const theme = board[teams[currentTeam].position];
-		selectedCard = decks[theme].splice(Math.floor(Math.random() * decks[theme].length), 1)[0];
-		if (selectedCard === undefined) {
+		if (decks[theme].length === 0) {
 			decks[theme] = shuffleArray(cards.filter((card) => card.theme === theme));
 		}
+		selectedCard = decks[theme].splice(Math.floor(Math.random() * decks[theme].length), 1)[0];
 		cardState = 'level';
 		isCardOpen = true;
 	}
