@@ -139,6 +139,10 @@
 				<a target="_blank" href="https://github.com/{login}">{login}</a>
 			{/each}
 		</footer>
+		<p>
+			Ajoute des cartes <a target="_blank" href="https://github.com/jeremt/ttmc-for-dev">ici</a> pour
+			contribuer !
+		</p>
 	</div>
 {:else}
 	<Board {teams} />
@@ -208,13 +212,23 @@
 		display: flex;
 		gap: 1rem;
 	}
-	.start footer a {
+	p a,
+	footer a {
 		color: #ce9178;
 	}
 	h1,
 	h2 {
 		color: #74985d;
 		text-align: center;
+		text-transform: uppercase;
+		font-family: var(--font-title);
+		font-weight: var(--font-title-weight);
+	}
+	h1 {
+		font-size: 3rem;
+	}
+	h2 {
+		font-size: 2.5rem;
 	}
 	p {
 		color: #cccccc;
@@ -237,12 +251,14 @@
 		font-size: 1.2rem;
 	}
 	.card .theme {
-		font-size: 2.5rem;
-		font-weight: bold;
-		margin-bottom: 0.5rem;
+		font-size: 3rem;
+		font-family: var(--font-title);
+		font-weight: var(--font-title-weight);
+		text-transform: uppercase;
+		margin-bottom: 0.2rem;
 	}
 	.card footer button {
-		margin-top: 0.5rem;
+		margin-top: 0.2rem;
 	}
 	.card .question,
 	.card .answer {

@@ -40,8 +40,11 @@
 		flex-wrap: wrap;
 		justify-content: center;
 		gap: 1rem;
-		font-weight: bold;
+		font-size: 1.5rem;
+		font-family: var(--font-title);
+		font-weight: var(--font-title-weight);
 		text-align: center;
+		text-transform: uppercase;
 	}
 	.tile {
 		position: relative;
