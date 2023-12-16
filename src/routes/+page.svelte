@@ -5,6 +5,7 @@
 	import Dialog from '$lib/Dialog.svelte';
 	import { makeConfetti } from '$lib/makeConfetti';
 	import { board, categoryToColor, type Card, type Team } from '$lib/data';
+	import { shuffleArray } from '$lib/shuffleArray';
 
 	let teams: Team[] = [
 		{ name: 'A', position: 0, color: '#4f70e4' },
@@ -38,24 +39,15 @@
 	let selectedCard: Card | undefined = undefined;
 	let selectedQuestionIndex = 0;
 
-	// Fisher-Yates powered by ChatGPT 😅
-	function shuffleArray(array: Card[]) {
-		for (let i = array.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[array[i], array[j]] = [array[j], array[i]];
-		}
-		return array;
-	}
-
 	function pickCard() {
 		if (decks === null) {
 			return;
 		}
-		const theme = board[teams[currentTeam].position];
-		if (decks[theme].length === 0) {
-			decks[theme] = shuffleArray(cards.filter((card) => card.theme === theme));
+		const category = board[teams[currentTeam].position];
+		if (decks[category].length === 0) {
+			decks[category] = shuffleArray(cards.filter((card) => card.category === category));
 		}
-		selectedCard = decks[theme].splice(Math.floor(Math.random() * decks[theme].length), 1)[0];
+		selectedCard = decks[category].splice(Math.floor(Math.random() * decks[category].length), 1)[0];
 		cardState = 'level';
 		isCardOpen = true;
 	}
