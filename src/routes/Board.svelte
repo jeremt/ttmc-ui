@@ -35,6 +35,7 @@
 
 <style>
 	.board {
+		margin-bottom: 5rem;
 		padding: 1rem;
 		display: flex;
 		flex-wrap: wrap;

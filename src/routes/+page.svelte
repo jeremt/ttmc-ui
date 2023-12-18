@@ -8,7 +8,7 @@
 	import { shuffleArray } from '$lib/shuffleArray';
 
 	let teams: Team[] = [
-		{ name: 'A', position: 0, color: '#4f70e4' },
+		{ name: 'A', position: 0, color: '#627fea' },
 		{ name: 'B', position: 0, color: '#ffae73' }
 	];
 	let currentTeam = 0;
@@ -64,7 +64,7 @@
 	function handleFail() {
 		currentTeam = (currentTeam + 1) % teams.length;
 		isCardOpen = false;
-		setTimeout(pickCard, 2000);
+		// setTimeout(pickCard, 2000);
 	}
 
 	let canvas: HTMLCanvasElement | null = null;
@@ -89,9 +89,10 @@
 		}
 	}
 
+	let gameStarted = false;
 	function handleRestart() {
 		handleReset();
-		pickCard();
+		gameStarted = true;
 	}
 
 	function handleReset() {
@@ -115,7 +116,7 @@
 	<div class="start">
 		<h1>/* Loading cards... */</h1>
 	</div>
-{:else if selectedCard === undefined}
+{:else if !gameStarted}
 	<div class="start">
 		<h1>/* TTMC for dev (WIP) */</h1>
 		<button class="primary" on:click={handleRestart}>startGame();</button>
@@ -138,6 +139,12 @@
 	</div>
 {:else}
 	<Board {teams} />
+	<div id="toolbar">
+		<div id="team" style:color={teams[currentTeam].color}>
+			Team {teams[currentTeam].name}'s turn
+		</div>
+		<button class="primary" on:click={pickCard}>pickCard();</button>
+	</div>
 {/if}
 
 <Dialog bind:isOpen={isCardOpen}>
@@ -203,6 +210,29 @@
 	.start footer {
 		display: flex;
 		gap: 1rem;
+		padding-inline: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	#toolbar {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background-color: #222222cc;
+		backdrop-filter: blur(10px);
+		padding: 1rem;
+		font-family: var(--font-title);
+		border-top: 2px solid var(--color-bg);
+	}
+	#team {
+		margin-left: 0.5rem;
+		font-weight: normal;
+		font-size: 1.8rem;
 	}
 	p a,
 	footer a {
@@ -217,6 +247,7 @@
 		font-weight: var(--font-title-weight);
 	}
 	h1 {
+		padding-inline: 1rem;
 		font-size: 3rem;
 	}
 	h2 {
