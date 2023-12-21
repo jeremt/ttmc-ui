@@ -33,7 +33,7 @@
 				if (x === 0 && y === 0) {
 					kind = 'start';
 				} else if (positions.length + 1 === board.length) {
-					kind = 'end-right';
+					kind = x === 0 ? 'end-bottom' : 'end-right';
 				} else if (x === 0) {
 					kind = 'bottom-left';
 				} else if (x === cols - 1) {
@@ -56,7 +56,7 @@
 			for (let x = cols - 1; x >= 0; x--) {
 				let kind: TileKind = 'default';
 				if (positions.length + 1 === board.length) {
-					kind = 'end-left';
+					kind = x === cols - 1 ? 'end-bottom' : 'end-left';
 				} else if (x === 0) {
 					kind = 'top-left';
 				} else if (x === cols - 1) {

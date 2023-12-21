@@ -186,7 +186,7 @@
 				<button class="fail" on:click={handleFail}>response == false</button>
 			</footer>
 		{:else}
-			<div class="question">C'est fini, l'équipe {teams[currentTeam].name} gagne !</div>
+			<div class="endTitle">Team {teams[currentTeam].name} wins 🎉</div>
 			<footer>
 				<button class="primary" on:click={handleRestart}>newGame();</button>
 				<button on:click={handleReset}>return to_home;</button>
@@ -288,6 +288,11 @@
 	.card .answer {
 		font-size: 1.4rem;
 		margin-bottom: 1rem;
+	}
+	.card .endTitle {
+		font-family: var(--font-title);
+		font-weight: var(--font-title-weight);
+		font-size: 2.5rem;
 	}
 	canvas {
 		top: 0;
