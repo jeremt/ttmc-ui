@@ -127,7 +127,7 @@
 		</p>
 		<p>La première équipe à l'arrivée a gagné !</p>
 		<h2>/* Contributeurs */</h2>
-		<footer>
+		<footer style:margin-top="0.5rem">
 			{#each contributors as { login }}
 				<a target="_blank" href="https://github.com/{login}">{login}</a>
 			{/each}
@@ -143,7 +143,7 @@
 		<div id="team" style:color={teams[currentTeam].color}>
 			Team {teams[currentTeam].name}'s turn
 		</div>
-		<button class="primary" on:click={pickCard}>pickCard();</button>
+		<button class="primary" class:pulse={!isCardOpen} on:click={pickCard}>pickCard();</button>
 	</div>
 {/if}
 
@@ -251,7 +251,8 @@
 		font-size: 3rem;
 	}
 	h2 {
-		font-size: 2.5rem;
+		margin: 0;
+		font-size: 2rem;
 	}
 	p {
 		color: #cccccc;
