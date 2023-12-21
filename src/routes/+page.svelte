@@ -118,7 +118,7 @@
 	</div>
 {:else if !gameStarted}
 	<div class="start">
-		<h1>/* TTMC for dev (WIP) */</h1>
+		<img id="logo" src="/logo.svg" width="280" alt="TTMC (version dev)" />
 		<button class="primary" on:click={handleRestart}>startGame();</button>
 		<h2>/* Règles */</h2>
 		<p>
@@ -203,6 +203,10 @@
 		align-items: center;
 		justify-content: center;
 		height: 100svh;
+	}
+	#logo {
+		margin: 0 auto 1rem;
+		max-width: 80%;
 	}
 	.start button {
 		margin-bottom: 1rem;
