@@ -2,12 +2,81 @@
 	import { categoryToColor, type Team, board, categoryToText } from '$lib/data';
 
 	export let teams: Team[];
+
+	let tileSize = window.innerWidth < 600 ? 100 : 150;
+	let cols = Math.floor(window.innerWidth / tileSize) - 1;
+	let boardData = generate();
+
+	function resize() {
+		tileSize = window.innerWidth < 600 ? 100 : 150;
+		cols = Math.floor(window.innerWidth / tileSize) - 1;
+		boardData = generate();
+	}
+
+	function generate() {
+		type TileKind = 'start' | 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right' | 'default';
+		const positions: { x: number; y: number; kind: TileKind }[] = [];
+		let y = 0;
+		while (positions.length < board.length) {
+			for (let x = 0; x < cols; x++) {
+				let kind: TileKind = 'default';
+				if (x === 0 && y === 0) {
+					kind = 'start';
+				} else if (x === 0) {
+					kind = 'bottom-left';
+				} else if (x === cols - 1) {
+					kind = 'top-right';
+				}
+				positions.push({ x, y, kind });
+				if (positions.length === board.length) {
+					return { positions, rows: y };
+				}
+			}
+			positions.push({ x: cols - 1, y: y + 1, kind: 'default' });
+			if (positions.length === board.length) {
+				return { positions, rows: y + 1 };
+			}
+			y += 2;
+			for (let x = cols - 1; x >= 0; x--) {
+				let kind: TileKind = 'default';
+				if (x === 0) {
+					kind = 'top-left';
+				} else if (x === cols - 1) {
+					kind = 'bottom-right';
+				}
+				positions.push({ x, y, kind });
+				if (positions.length === board.length) {
+					return { positions, rows: y };
+				}
+			}
+			positions.push({ x: 0, y: y + 1, kind: 'default' });
+			if (positions.length === board.length) {
+				return { positions, rows: y + 1 };
+			}
+			y += 2;
+		}
+		return { positions, rows: y };
+	}
 </script>
 
-<div class="board">
+<svelte:window on:resize={resize} />
+
+<div class="board" style:--cols={cols} style:--rows={boardData.rows} style:--tileSize={tileSize}>
 	{#each board as tile, i}
-		<div class="tile" style:background-color={categoryToColor[tile]}>
-			<img width="64" height="64" src="/{tile}.png" alt={tile} />
+		<div
+			class="tile {boardData.positions[i].kind}"
+			style:left="{boardData.positions[i].x * tileSize}px"
+			style:top="{boardData.positions[i].y * tileSize}px"
+			style:background-color={categoryToColor[tile]}
+			style:font-size={tileSize === 150 ? '1.4rem' : '1rem'}
+		>
+			<img
+				width={tileSize * 0.5}
+				height={tileSize * 0.5}
+				style:pointer-events="none"
+				src="/{tile}.png"
+				alt={tile}
+			/>
 			{categoryToText[tile]}
 			{#if i === teams[0].position}
 				<div
@@ -35,28 +104,41 @@
 
 <style>
 	.board {
-		margin-bottom: 5rem;
-		padding: 1rem;
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 1rem;
-		font-size: 1.5rem;
+		position: relative;
+		width: calc(var(--tileSize) * var(--cols) * 1px);
+		height: calc(var(--tileSize) * var(--rows) * 1px + 240px);
+		margin: 2rem auto;
 		font-family: var(--font-title);
 		font-weight: var(--font-title-weight);
 		text-align: center;
 		text-transform: uppercase;
 	}
 	.tile {
-		position: relative;
-		width: 10rem;
-		height: 10rem;
-		border-radius: 0.5rem;
+		user-select: none;
+		border: 1px solid black;
+		position: absolute;
+		box-sizing: border-box;
+		width: calc(var(--tileSize) * 1px);
+		height: calc(var(--tileSize) * 1px);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		gap: 0.5rem;
+	}
+	.tile.start {
+		border-radius: 1rem 0 0 1rem;
+	}
+	.tile.top-left {
+		border-radius: 1rem 0 0 0;
+	}
+	.tile.bottom-left {
+		border-radius: 0 0 0 1rem;
+	}
+	.tile.top-right {
+		border-radius: 0 1rem 0 0;
+	}
+	.tile.bottom-right {
+		border-radius: 0 0 1rem 0;
 	}
 	.pawn {
 		display: flex;
@@ -64,8 +146,9 @@
 		justify-content: center;
 		position: absolute;
 		top: 0.5rem;
-		width: 1.5rem;
-		height: 1.5rem;
+		font-size: 1.5rem;
+		width: 2.5rem;
+		height: 2.5rem;
 		border: 2px solid black;
 		border-radius: 50%;
 		animation: 2s translate-back forwards;

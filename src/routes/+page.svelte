@@ -227,7 +227,7 @@
 		backdrop-filter: blur(10px);
 		padding: 1rem;
 		font-family: var(--font-title);
-		border-top: 2px solid var(--color-bg);
+		border-top: 2px solid black;
 	}
 	#team {
 		margin-left: 0.5rem;

@@ -29,6 +29,7 @@ export const board: Category[] = [
 	'dev-tools',
 	'algo-paradigms',
 	'dev-front',
+	'dev-back',
 	'dev-front',
 	'algo-paradigms',
 	'dev-back',
