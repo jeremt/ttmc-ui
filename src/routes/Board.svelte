@@ -14,14 +14,26 @@
 	}
 
 	function generate() {
-		type TileKind = 'start' | 'top-left' | 'bottom-left' | 'top-right' | 'bottom-right' | 'default';
+		type TileKind =
+			| 'start'
+			| 'end-left'
+			| 'end-right'
+			| 'end-bottom'
+			| 'top-left'
+			| 'bottom-left'
+			| 'top-right'
+			| 'bottom-right'
+			| 'default';
 		const positions: { x: number; y: number; kind: TileKind }[] = [];
 		let y = 0;
+		// TODO: handle ends
 		while (positions.length < board.length) {
 			for (let x = 0; x < cols; x++) {
 				let kind: TileKind = 'default';
 				if (x === 0 && y === 0) {
 					kind = 'start';
+				} else if (positions.length + 1 === board.length) {
+					kind = 'end-right';
 				} else if (x === 0) {
 					kind = 'bottom-left';
 				} else if (x === cols - 1) {
@@ -32,14 +44,20 @@
 					return { positions, rows: y };
 				}
 			}
-			positions.push({ x: cols - 1, y: y + 1, kind: 'default' });
+			positions.push({
+				x: cols - 1,
+				y: y + 1,
+				kind: positions.length + 1 === board.length ? 'end-bottom' : 'default'
+			});
 			if (positions.length === board.length) {
 				return { positions, rows: y + 1 };
 			}
 			y += 2;
 			for (let x = cols - 1; x >= 0; x--) {
 				let kind: TileKind = 'default';
-				if (x === 0) {
+				if (positions.length + 1 === board.length) {
+					kind = 'end-left';
+				} else if (x === 0) {
 					kind = 'top-left';
 				} else if (x === cols - 1) {
 					kind = 'bottom-right';
@@ -49,7 +67,11 @@
 					return { positions, rows: y };
 				}
 			}
-			positions.push({ x: 0, y: y + 1, kind: 'default' });
+			positions.push({
+				x: 0,
+				y: y + 1,
+				kind: positions.length + 1 === board.length ? 'end-bottom' : 'default'
+			});
 			if (positions.length === board.length) {
 				return { positions, rows: y + 1 };
 			}
@@ -106,7 +128,7 @@
 	.board {
 		position: relative;
 		width: calc(var(--tileSize) * var(--cols) * 1px);
-		height: calc(var(--tileSize) * var(--rows) * 1px + 240px);
+		height: calc(var(--tileSize) * var(--rows) * 1px + var(--tileSize) * 1px + 90px);
 		margin: 2rem auto;
 		font-family: var(--font-title);
 		font-weight: var(--font-title-weight);
@@ -139,6 +161,15 @@
 	}
 	.tile.bottom-right {
 		border-radius: 0 0 1rem 0;
+	}
+	.tile.end-bottom {
+		border-radius: 0 0 1rem 1rem;
+	}
+	.tile.end-right {
+		border-radius: 0 1rem 1rem 0;
+	}
+	.tile.end-left {
+		border-radius: 1rem 0 0 1rem;
 	}
 	.pawn {
 		display: flex;
